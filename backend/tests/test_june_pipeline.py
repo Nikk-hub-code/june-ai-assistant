@@ -12,7 +12,8 @@ def main():
             "What is Python?",
             "Explain Python",
             "Latest version of Python",
-            "What is Quantum Computing?"
+            "What is Quantum Computing?",
+            "Explain Neural Networks"
         ]
 
         print("\n" + "=" * 50)
@@ -36,6 +37,13 @@ def main():
             
             print("Reason:",
                     result["validation"]["reason"])
+            
+            if result.get("knowledge_created"):
+
+                print(
+                    "New Knowledge Stored:",
+                    result["knowledge_created"].topic
+                )
 
             if result["knowledge_found"]:
                 print("Retrieved Knowledge:")
