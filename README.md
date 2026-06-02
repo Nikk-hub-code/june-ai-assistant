@@ -1,6 +1,6 @@
 # 🧠 JUNE AI Assistant
 
-> **JUNE (Just Unified Neural Engine)** is being developed as a **Persistent Knowledge Intelligence System**, not a traditional chatbot.
+> **JUNE** is being developed as a **Persistent Knowledge Intelligence System**, not a traditional chatbot.
 
 Unlike conventional AI assistants that depend entirely on Large Language Models (LLMs) for knowledge, JUNE is designed around a different philosophy:
 
