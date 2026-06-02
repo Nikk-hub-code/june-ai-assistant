@@ -31,6 +31,12 @@ def main():
             )
             print("Knowledge Found:", result["knowledge_found"])
 
+            print("Action:",
+                    result["validation"]["action"])
+            
+            print("Reason:",
+                    result["validation"]["reason"])
+
             if result["knowledge_found"]:
                 print("Retrieved Knowledge:")
 

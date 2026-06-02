@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 
 from app.engines.understanding_engine import UnderstandingEngine
 from app.engines.retrieval_engine import RetrievalEngine
+from app.engines.validation_engine import ValidationEngine
+
 from app.repositories.knowledge_repository import KnowledgeRepository
 
 
@@ -17,6 +19,8 @@ class JunePipeline:
         self.retrieval_engine = RetrievalEngine(
             self.knowledge_repository
         )
+
+        self.validation_engine = ValidationEngine()
     
     def process_query(self, user_query: str) -> dict:
         understanding = self.understanding_engine.understand(
@@ -31,9 +35,15 @@ class JunePipeline:
 
         knowledge_found = len(retrieved_knowledge) > 0
 
+        validation = self.validation_engine.validate(
+            understanding = understanding,
+            knowledge_found = knowledge_found
+        )
+
         return {
             "user_query": user_query,
             "understanding": understanding,
             "knowledge_found": knowledge_found,
+            "validation": validation,
             "retrieved_knowledge": retrieved_knowledge
         }
