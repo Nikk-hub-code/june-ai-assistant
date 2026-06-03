@@ -26,6 +26,27 @@ class KnowledgeService:
         source_url = best_source.get("url", "")
         confidence_score = best_source.get("score", 0.80)
 
+        existing_knowledge = (
+            self.repository.get_knowledge_by_topic(
+                topic
+            )
+        )
+
+        if existing_knowledge:
+
+            knowledge = self.repository.update_knowledge(
+                knowledge_id = existing_knowledge.id,
+                content = content,
+                source_url = source_url,
+                domain = domain,
+                confidence_score = confidence_score
+            )
+
+            return {
+                "knowledge": knowledge,
+                "action": "updated"
+            }
+
         knowledge = self.repository.create_knowledge(
             topic = topic,
             content = content,
@@ -34,4 +55,7 @@ class KnowledgeService:
             confidence_score = confidence_score
         )
 
-        return knowledge
+        return {
+            "knowledge": knowledge,
+            "action": "created"
+        }

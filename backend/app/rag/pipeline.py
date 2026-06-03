@@ -27,40 +27,45 @@ class JunePipeline:
         self.research_engine = ResearchEngine()
 
         self.knowledge_service = KnowledgeService(db)
-    
+
     def process_query(self, user_query: str) -> dict:
-        #Step 1
+
+        # Step 1: Understanding
         understanding = self.understanding_engine.understand(
             user_query
         )
 
         topic = understanding["topic"]
 
-        #Step 2
+        # Step 2: Retrieval
         retrieved_knowledge = self.retrieval_engine.retrieve(
-            query= topic
+            query=topic
         )
 
         knowledge_found = len(retrieved_knowledge) > 0
 
-        #Step 3
+        # Step 3: Validation
         validation = self.validation_engine.validate(
-            understanding = understanding,
-            knowledge_found = knowledge_found
+            understanding=understanding,
+            knowledge_found=knowledge_found
         )
 
         action = validation["action"]
 
-        #Step 4
+        # --------------------------------------------------
+        # CASE 1: Knowledge Missing
+        # --------------------------------------------------
         if action == "research_required":
 
             research_result = self.research_engine.research(
-                topic = topic
+                topic=topic
             )
 
-            knowledge = self.knowledge_service.create_from_research(
-                topic = topic,
-                research_result = research_result
+            knowledge_result = (
+                self.knowledge_service.create_from_research(
+                    topic=topic,
+                    research_result=research_result
+                )
             )
 
             return {
@@ -68,10 +73,42 @@ class JunePipeline:
                 "understanding": understanding,
                 "validation": validation,
                 "knowledge_found": False,
-                "knowledge_created": knowledge,
-                "research_result": research_result
+                "knowledge_action": knowledge_result["action"],
+                "knowledge_record": knowledge_result["knowledge"],
+                "research_result": research_result,
+                "retrieved_knowledge": []
             }
 
+        # --------------------------------------------------
+        # CASE 2: Knowledge Exists But Needs Fresh Validation
+        # --------------------------------------------------
+        if action == "validate_existing_knowledge":
+
+            research_result = self.research_engine.research(
+                topic=topic
+            )
+
+            knowledge_result = (
+                self.knowledge_service.create_from_research(
+                    topic=topic,
+                    research_result=research_result
+                )
+            )
+
+            return {
+                "user_query": user_query,
+                "understanding": understanding,
+                "validation": validation,
+                "knowledge_found": True,
+                "knowledge_action": knowledge_result["action"],
+                "knowledge_record": knowledge_result["knowledge"],
+                "research_result": research_result,
+                "retrieved_knowledge": retrieved_knowledge
+            }
+
+        # --------------------------------------------------
+        # CASE 3: Use Existing Knowledge
+        # --------------------------------------------------
         return {
             "user_query": user_query,
             "understanding": understanding,

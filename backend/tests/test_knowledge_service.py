@@ -8,7 +8,7 @@ def main():
     db = SessionLocal()
 
     try:
-        topic = "Quantum Computing"
+        topic = "Transformer Neural Networks Architecture"
 
         research_engine = ResearchEngine()
         knowledge_service = KnowledgeService(db)
@@ -19,20 +19,25 @@ def main():
 
         research_result = research_engine.research(topic)
 
-        knowledge = knowledge_service.create_from_research(
+        result = knowledge_service.create_from_research(
             topic=topic,
             research_result=research_result
         )
 
-        if knowledge:
-            print("Knowledge Created Successfully")
+        if result:
+
+            knowledge = result["knowledge"]
+
+            print("Action:", result["action"])
+            print("Knowledge Stored Successfully")
             print("ID:", knowledge.id)
             print("Topic:", knowledge.topic)
             print("Domain:", knowledge.domain)
             print("Source URL:", knowledge.source_url)
             print("Confidence:", knowledge.confidence_score)
+
         else:
-            print("No knowledge was created")
+            print("No knowledge was stored")
 
         print("\n" + "=" * 50)
         print("KNOWLEDGE SERVICE TEST COMPLETE")

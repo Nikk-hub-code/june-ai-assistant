@@ -26,26 +26,46 @@ def main():
             print("\nUser Query:", result["user_query"])
             print("Topic:", result["understanding"]["topic"])
             print("Intent:", result["understanding"]["intent"])
+
             print(
                 "Requires Freshness:",
                 result["understanding"]["requires_freshness"]
             )
-            print("Knowledge Found:", result["knowledge_found"])
 
-            print("Action:",
-                    result["validation"]["action"])
-            
-            print("Reason:",
-                    result["validation"]["reason"])
-            
-            if result.get("knowledge_created"):
+            print(
+                "Knowledge Found:",
+                result["knowledge_found"]
+            )
+
+            print(
+                "Action:",
+                result["validation"]["action"]
+            )
+
+            print(
+                "Reason:",
+                result["validation"]["reason"]
+            )
+
+            if result.get("knowledge_record"):
 
                 print(
-                    "New Knowledge Stored:",
-                    result["knowledge_created"].topic
+                    "Knowledge Action:",
+                    result["knowledge_action"]
                 )
 
-            if result["knowledge_found"]:
+                print(
+                    "Knowledge Topic:",
+                    result["knowledge_record"].topic
+                )
+
+                print(
+                    "Knowledge ID:",
+                    result["knowledge_record"].id
+                )
+
+            if result.get("retrieved_knowledge"):
+
                 print("Retrieved Knowledge:")
 
                 for item in result["retrieved_knowledge"]:

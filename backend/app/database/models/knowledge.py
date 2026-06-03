@@ -1,3 +1,4 @@
+#knowledge.py
 from sqlalchemy import Column, Integer, String, Text, Float, DateTime
 from sqlalchemy.sql import func
 
