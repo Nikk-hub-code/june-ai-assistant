@@ -38,11 +38,17 @@ class JunePipeline:
         topic = understanding["topic"]
 
         # Step 2: Retrieval
+        best_match = (
+            self.retrieval_engine.retrieve_best_match(
+                topic
+            )
+        )
+
         retrieved_knowledge = self.retrieval_engine.retrieve(
             query=topic
         )
 
-        knowledge_found = len(retrieved_knowledge) > 0
+        knowledge_found = best_match is not None
 
         # Step 3: Validation
         validation = self.validation_engine.validate(

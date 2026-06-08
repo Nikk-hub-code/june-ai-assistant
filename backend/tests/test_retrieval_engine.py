@@ -35,7 +35,24 @@ def main():
         # -----------------------------------
         # TEST 2
         # -----------------------------------
-        print("\n[2] KNOWLEDGE EXISTS")
+        print("\n[2] BEST MATCH")
+
+        best_match = retrieval_engine.retrieve_best_match(
+            "Python"
+        )
+
+        if best_match:
+            print(
+                f"ID={best_match.id} | "
+                f"Topic={best_match.topic} | "
+                f"Domain={best_match.domain}"
+            )
+        else:
+            print("No exact match found")
+        # -----------------------------------
+        # TEST 3
+        # -----------------------------------
+        print("\n[3] KNOWLEDGE EXISTS")
 
         exists = retrieval_engine.knowledge_exists(
             "Python"
@@ -44,12 +61,12 @@ def main():
         print(f"Exists: {exists}")
 
         # -----------------------------------
-        # TEST 3
+        # TEST 4
         # -----------------------------------
-        print("\n[3] UNKNOWN QUERY")
+        print("\n[4] UNKNOWN QUERY")
 
         exists = retrieval_engine.knowledge_exists(
-            "Quantum Computing"
+            "Alien Quantum Banana Theory"
         )
 
         print(f"Exists: {exists}")

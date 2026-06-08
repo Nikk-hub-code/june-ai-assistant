@@ -1,7 +1,8 @@
-#retrieval_engine.py
-from typing import List
+from typing import List, Optional
 
-from app.repositories.knowledge_repository import KnowledgeRepository
+from app.repositories.knowledge_repository import (
+    KnowledgeRepository
+)
 from app.database.models.knowledge import Knowledge
 
 
@@ -12,28 +13,38 @@ class RetrievalEngine:
             repository: KnowledgeRepository
     ):
         self.repository = repository
-    
+
     def retrieve(
             self,
             query: str,
             limit: int = 5
     ) -> List[Knowledge]:
-        
+
         results = self.repository.search_knowledge(
-            query = query,
-            limit = limit
+            query=query,
+            limit=limit
         )
 
         return results
-    
-    def knowledge_exists(
+
+    def retrieve_best_match(
             self,
-            query: str
-    ) -> bool:
-        
-        results = self.retrieve(
-            query = query,
-            limit = 1
+            topic: str
+    ) -> Optional[Knowledge]:
+
+        return (
+            self.repository.get_best_topic_match(
+                topic
+            )
         )
 
-        return len(results) > 0
+    def knowledge_exists(
+            self,
+            topic: str
+    ) -> bool:
+
+        knowledge = (
+            self.retrieve_best_match(topic)
+        )
+
+        return knowledge is not None
